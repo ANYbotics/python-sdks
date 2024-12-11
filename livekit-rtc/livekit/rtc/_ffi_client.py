@@ -14,9 +14,11 @@
 
 import signal
 import asyncio
+import sys
 from contextlib import ExitStack
 import ctypes
 import importlib.resources
+from .version import __version__
 import logging
 import os
 import platform
@@ -26,8 +28,7 @@ from typing import Generic, List, Optional, TypeVar
 
 from ._proto import ffi_pb2 as proto_ffi
 from ._utils import Queue, classproperty
-
-logger = logging.getLogger("livekit")
+from .log import logger
 
 _resource_files = ExitStack()
 atexit.register(_resource_files.close)
@@ -61,7 +62,12 @@ ffi_lib = get_ffi_lib()
 ffi_cb_fnc = ctypes.CFUNCTYPE(None, ctypes.POINTER(ctypes.c_uint8), ctypes.c_size_t)
 
 # C function types
-ffi_lib.livekit_ffi_initialize.argtypes = [ffi_cb_fnc, ctypes.c_bool]
+ffi_lib.livekit_ffi_initialize.argtypes = [
+    ffi_cb_fnc,
+    ctypes.c_bool,
+    ctypes.c_char_p,
+    ctypes.c_char_p,
+]
 
 ffi_lib.livekit_ffi_request.argtypes = [
     ctypes.POINTER(ctypes.c_ubyte),
@@ -73,6 +79,10 @@ ffi_lib.livekit_ffi_request.restype = ctypes.c_uint64
 
 ffi_lib.livekit_ffi_drop_handle.argtypes = [ctypes.c_uint64]
 ffi_lib.livekit_ffi_drop_handle.restype = ctypes.c_bool
+
+
+ffi_lib.livekit_ffi_dispose.argtypes = []
+ffi_lib.livekit_ffi_dispose.restype = None
 
 INVALID_HANDLE = 0
 
@@ -162,7 +172,7 @@ def ffi_event_callback(
 
         return  # no need to queue the logs
     elif which == "panic":
-        logger.critical("Panic: %s", event.panic.message)
+        print("FFI Panic: ", event.panic.message, file=sys.stderr, flush=True)
         # We are in a unrecoverable state, terminate the process
         os.kill(os.getpid(), signal.SIGTERM)
         return
@@ -192,16 +202,22 @@ class FfiClient:
     _instance: Optional["FfiClient"] = None
 
     @classproperty
-    def instance(self):
-        if self._instance is None:
-            self._instance = FfiClient()
-        return self._instance
+    def instance(cls) -> "FfiClient":
+        if cls._instance is None:
+            cls._instance = FfiClient()
+        return cls._instance
 
     def __init__(self) -> None:
         self._lock = threading.RLock()
         self._queue = FfiQueue[proto_ffi.FfiEvent]()
 
-        ffi_lib.livekit_ffi_initialize(ffi_event_callback, True)
+        ffi_lib.livekit_ffi_initialize(
+            ffi_event_callback, True, b"python", __version__.encode("ascii")
+        )
+
+        @atexit.register
+        def _dispose_lk_ffi():
+            ffi_lib.livekit_ffi_dispose()
 
     @property
     def queue(self) -> FfiQueue[proto_ffi.FfiEvent]:

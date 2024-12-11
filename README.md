@@ -63,7 +63,7 @@ async def main():
     print(results)
     await lkapi.aclose()
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
 ```
 
 ## Using Real-time SDK
@@ -73,6 +73,8 @@ $ pip install livekit
 ```
 
 ### Connecting to a room
+
+see [room_example](examples/room_example.py) for full example
 
 ```python
 from livekit import rtc
@@ -86,7 +88,7 @@ async def main():
             "participant connected: %s %s", participant.sid, participant.identity)
 
     async def receive_frames(stream: rtc.VideoStream):
-        async for frame in video_stream:
+        async for frame in stream:
             # received a video frame from the track, process it here
             pass
 
@@ -105,9 +107,11 @@ async def main():
 
     # participants and tracks that are already available in the room
     # participant_connected and track_published events will *not* be emitted for them
-    for participant in room.participants.items():
-        for publication in participant.track_publications.items():
-            print("track publication: %s", publication.sid)
+    for identity, participant in room.remote_participants.items():
+        print(f"identity: {identity}")
+        print(f"participant: {participant}")
+        for tid, publication in participant.track_publications.items():
+            print(f"\ttrack id: {publication}")
 ```
 
 ### Sending and receiving chat
@@ -127,6 +131,51 @@ def on_message_received(msg: rtc.ChatMessage):
 # sending chat
 await chat.send_message("hello world")
 ```
+
+
+### RPC
+
+Perform your own predefined method calls from one participant to another. 
+
+This feature is especially powerful when used with [Agents](https://docs.livekit.io/agents), for instance to forward LLM function calls to your client application.
+
+#### Registering an RPC method
+
+The participant who implements the method and will receive its calls must first register support:
+
+```python
+@room.local_participant.register_rpc_method("greet")
+async def handle_greet(data: RpcInvocationData):
+    print(f"Received greeting from {data.caller_identity}: {data.payload}")
+    return f"Hello, {data.caller_identity}!"
+```
+
+In addition to the payload, your handler will also receive `response_timeout`, which informs you the maximum time available to return a response. If you are unable to respond in time, the call will result in an error on the caller's side.
+
+#### Performing an RPC request
+
+The caller may then initiate an RPC call like so:
+
+```python
+try:
+  response = await room.local_participant.perform_rpc(
+    destination_identity='recipient-identity',
+    method='greet',
+    payload='Hello from RPC!'
+  )
+  print(f"RPC response: {response}")
+except Exception as e:
+  print(f"RPC call failed: {e}")
+```
+
+You may find it useful to adjust the `response_timeout` parameter, which indicates the amount of time you will wait for a response. We recommend keeping this value as low as possible while still satisfying the constraints of your application.
+
+#### Errors
+
+LiveKit is a dynamic realtime environment and calls can fail for various reasons. 
+
+You may throw errors of the type `RpcError` with a string `message` in an RPC method handler and they will be received on the caller's side with the message intact. Other errors will not be transmitted and will instead arrive to the caller as `1500` ("Application Error"). Other built-in errors are detailed in `RpcError`.
+
 
 ## Examples
 

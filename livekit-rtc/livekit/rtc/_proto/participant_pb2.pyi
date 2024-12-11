@@ -20,11 +20,39 @@ import builtins
 import collections.abc
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
+import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 from . import handle_pb2
+import sys
 import typing
 
+if sys.version_info >= (3, 10):
+    import typing as typing_extensions
+else:
+    import typing_extensions
+
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+
+class _ParticipantKind:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _ParticipantKindEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ParticipantKind.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    PARTICIPANT_KIND_STANDARD: _ParticipantKind.ValueType  # 0
+    PARTICIPANT_KIND_INGRESS: _ParticipantKind.ValueType  # 1
+    PARTICIPANT_KIND_EGRESS: _ParticipantKind.ValueType  # 2
+    PARTICIPANT_KIND_SIP: _ParticipantKind.ValueType  # 3
+    PARTICIPANT_KIND_AGENT: _ParticipantKind.ValueType  # 4
+
+class ParticipantKind(_ParticipantKind, metaclass=_ParticipantKindEnumTypeWrapper): ...
+
+PARTICIPANT_KIND_STANDARD: ParticipantKind.ValueType  # 0
+PARTICIPANT_KIND_INGRESS: ParticipantKind.ValueType  # 1
+PARTICIPANT_KIND_EGRESS: ParticipantKind.ValueType  # 2
+PARTICIPANT_KIND_SIP: ParticipantKind.ValueType  # 3
+PARTICIPANT_KIND_AGENT: ParticipantKind.ValueType  # 4
+global___ParticipantKind = ParticipantKind
 
 @typing.final
 class ParticipantInfo(google.protobuf.message.Message):
@@ -41,9 +69,10 @@ class ParticipantInfo(google.protobuf.message.Message):
         def __init__(
             self,
             *,
-            key: builtins.str = ...,
-            value: builtins.str = ...,
+            key: builtins.str | None = ...,
+            value: builtins.str | None = ...,
         ) -> None: ...
+        def HasField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> builtins.bool: ...
         def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
 
     SID_FIELD_NUMBER: builtins.int
@@ -51,22 +80,26 @@ class ParticipantInfo(google.protobuf.message.Message):
     IDENTITY_FIELD_NUMBER: builtins.int
     METADATA_FIELD_NUMBER: builtins.int
     ATTRIBUTES_FIELD_NUMBER: builtins.int
+    KIND_FIELD_NUMBER: builtins.int
     sid: builtins.str
     name: builtins.str
     identity: builtins.str
     metadata: builtins.str
+    kind: global___ParticipantKind.ValueType
     @property
     def attributes(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.str]: ...
     def __init__(
         self,
         *,
-        sid: builtins.str = ...,
-        name: builtins.str = ...,
-        identity: builtins.str = ...,
-        metadata: builtins.str = ...,
+        sid: builtins.str | None = ...,
+        name: builtins.str | None = ...,
+        identity: builtins.str | None = ...,
+        metadata: builtins.str | None = ...,
         attributes: collections.abc.Mapping[builtins.str, builtins.str] | None = ...,
+        kind: global___ParticipantKind.ValueType | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["attributes", b"attributes", "identity", b"identity", "metadata", b"metadata", "name", b"name", "sid", b"sid"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["identity", b"identity", "kind", b"kind", "metadata", b"metadata", "name", b"name", "sid", b"sid"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["attributes", b"attributes", "identity", b"identity", "kind", b"kind", "metadata", b"metadata", "name", b"name", "sid", b"sid"]) -> None: ...
 
 global___ParticipantInfo = ParticipantInfo
 

@@ -22,6 +22,7 @@ import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 from . import handle_pb2
 import sys
+from . import track_pb2
 import typing
 
 if sys.version_info >= (3, 10):
@@ -30,6 +31,79 @@ else:
     import typing_extensions
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+
+class _SoxResamplerDataType:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _SoxResamplerDataTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_SoxResamplerDataType.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    SOXR_DATATYPE_INT16I: _SoxResamplerDataType.ValueType  # 0
+    """TODO(theomonnom): support other datatypes (shouldn't really be needed)"""
+    SOXR_DATATYPE_INT16S: _SoxResamplerDataType.ValueType  # 1
+
+class SoxResamplerDataType(_SoxResamplerDataType, metaclass=_SoxResamplerDataTypeEnumTypeWrapper): ...
+
+SOXR_DATATYPE_INT16I: SoxResamplerDataType.ValueType  # 0
+"""TODO(theomonnom): support other datatypes (shouldn't really be needed)"""
+SOXR_DATATYPE_INT16S: SoxResamplerDataType.ValueType  # 1
+global___SoxResamplerDataType = SoxResamplerDataType
+
+class _SoxQualityRecipe:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _SoxQualityRecipeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_SoxQualityRecipe.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    SOXR_QUALITY_QUICK: _SoxQualityRecipe.ValueType  # 0
+    SOXR_QUALITY_LOW: _SoxQualityRecipe.ValueType  # 1
+    SOXR_QUALITY_MEDIUM: _SoxQualityRecipe.ValueType  # 2
+    SOXR_QUALITY_HIGH: _SoxQualityRecipe.ValueType  # 3
+    SOXR_QUALITY_VERYHIGH: _SoxQualityRecipe.ValueType  # 4
+
+class SoxQualityRecipe(_SoxQualityRecipe, metaclass=_SoxQualityRecipeEnumTypeWrapper): ...
+
+SOXR_QUALITY_QUICK: SoxQualityRecipe.ValueType  # 0
+SOXR_QUALITY_LOW: SoxQualityRecipe.ValueType  # 1
+SOXR_QUALITY_MEDIUM: SoxQualityRecipe.ValueType  # 2
+SOXR_QUALITY_HIGH: SoxQualityRecipe.ValueType  # 3
+SOXR_QUALITY_VERYHIGH: SoxQualityRecipe.ValueType  # 4
+global___SoxQualityRecipe = SoxQualityRecipe
+
+class _SoxFlagBits:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _SoxFlagBitsEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_SoxFlagBits.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    SOXR_ROLLOFF_SMALL: _SoxFlagBits.ValueType  # 0
+    """1 << 0"""
+    SOXR_ROLLOFF_MEDIUM: _SoxFlagBits.ValueType  # 1
+    """1 << 1"""
+    SOXR_ROLLOFF_NONE: _SoxFlagBits.ValueType  # 2
+    """1 << 2"""
+    SOXR_HIGH_PREC_CLOCK: _SoxFlagBits.ValueType  # 3
+    """1 << 3"""
+    SOXR_DOUBLE_PRECISION: _SoxFlagBits.ValueType  # 4
+    """1 << 4"""
+    SOXR_VR: _SoxFlagBits.ValueType  # 5
+    """1 << 5"""
+
+class SoxFlagBits(_SoxFlagBits, metaclass=_SoxFlagBitsEnumTypeWrapper): ...
+
+SOXR_ROLLOFF_SMALL: SoxFlagBits.ValueType  # 0
+"""1 << 0"""
+SOXR_ROLLOFF_MEDIUM: SoxFlagBits.ValueType  # 1
+"""1 << 1"""
+SOXR_ROLLOFF_NONE: SoxFlagBits.ValueType  # 2
+"""1 << 2"""
+SOXR_HIGH_PREC_CLOCK: SoxFlagBits.ValueType  # 3
+"""1 << 3"""
+SOXR_DOUBLE_PRECISION: SoxFlagBits.ValueType  # 4
+"""1 << 4"""
+SOXR_VR: SoxFlagBits.ValueType  # 5
+"""1 << 5"""
+global___SoxFlagBits = SoxFlagBits
 
 class _AudioStreamType:
     ValueType = typing.NewType("ValueType", builtins.int)
@@ -72,15 +146,22 @@ class NewAudioStreamRequest(google.protobuf.message.Message):
 
     TRACK_HANDLE_FIELD_NUMBER: builtins.int
     TYPE_FIELD_NUMBER: builtins.int
+    SAMPLE_RATE_FIELD_NUMBER: builtins.int
+    NUM_CHANNELS_FIELD_NUMBER: builtins.int
     track_handle: builtins.int
     type: global___AudioStreamType.ValueType
+    sample_rate: builtins.int
+    num_channels: builtins.int
     def __init__(
         self,
         *,
-        track_handle: builtins.int = ...,
-        type: global___AudioStreamType.ValueType = ...,
+        track_handle: builtins.int | None = ...,
+        type: global___AudioStreamType.ValueType | None = ...,
+        sample_rate: builtins.int | None = ...,
+        num_channels: builtins.int | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["track_handle", b"track_handle", "type", b"type"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["num_channels", b"num_channels", "sample_rate", b"sample_rate", "track_handle", b"track_handle", "type", b"type"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["num_channels", b"num_channels", "sample_rate", b"sample_rate", "track_handle", b"track_handle", "type", b"type"]) -> None: ...
 
 global___NewAudioStreamRequest = NewAudioStreamRequest
 
@@ -102,6 +183,51 @@ class NewAudioStreamResponse(google.protobuf.message.Message):
 global___NewAudioStreamResponse = NewAudioStreamResponse
 
 @typing.final
+class AudioStreamFromParticipantRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    PARTICIPANT_HANDLE_FIELD_NUMBER: builtins.int
+    TYPE_FIELD_NUMBER: builtins.int
+    TRACK_SOURCE_FIELD_NUMBER: builtins.int
+    SAMPLE_RATE_FIELD_NUMBER: builtins.int
+    NUM_CHANNELS_FIELD_NUMBER: builtins.int
+    participant_handle: builtins.int
+    type: global___AudioStreamType.ValueType
+    track_source: track_pb2.TrackSource.ValueType
+    sample_rate: builtins.int
+    num_channels: builtins.int
+    def __init__(
+        self,
+        *,
+        participant_handle: builtins.int | None = ...,
+        type: global___AudioStreamType.ValueType | None = ...,
+        track_source: track_pb2.TrackSource.ValueType | None = ...,
+        sample_rate: builtins.int | None = ...,
+        num_channels: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["num_channels", b"num_channels", "participant_handle", b"participant_handle", "sample_rate", b"sample_rate", "track_source", b"track_source", "type", b"type"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["num_channels", b"num_channels", "participant_handle", b"participant_handle", "sample_rate", b"sample_rate", "track_source", b"track_source", "type", b"type"]) -> None: ...
+
+global___AudioStreamFromParticipantRequest = AudioStreamFromParticipantRequest
+
+@typing.final
+class AudioStreamFromParticipantResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    STREAM_FIELD_NUMBER: builtins.int
+    @property
+    def stream(self) -> global___OwnedAudioStream: ...
+    def __init__(
+        self,
+        *,
+        stream: global___OwnedAudioStream | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["stream", b"stream"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["stream", b"stream"]) -> None: ...
+
+global___AudioStreamFromParticipantResponse = AudioStreamFromParticipantResponse
+
+@typing.final
 class NewAudioSourceRequest(google.protobuf.message.Message):
     """Create a new AudioSource"""
 
@@ -111,28 +237,24 @@ class NewAudioSourceRequest(google.protobuf.message.Message):
     OPTIONS_FIELD_NUMBER: builtins.int
     SAMPLE_RATE_FIELD_NUMBER: builtins.int
     NUM_CHANNELS_FIELD_NUMBER: builtins.int
-    ENABLE_QUEUE_FIELD_NUMBER: builtins.int
+    QUEUE_SIZE_MS_FIELD_NUMBER: builtins.int
     type: global___AudioSourceType.ValueType
     sample_rate: builtins.int
     num_channels: builtins.int
-    enable_queue: builtins.bool
+    queue_size_ms: builtins.int
     @property
     def options(self) -> global___AudioSourceOptions: ...
     def __init__(
         self,
         *,
-        type: global___AudioSourceType.ValueType = ...,
+        type: global___AudioSourceType.ValueType | None = ...,
         options: global___AudioSourceOptions | None = ...,
-        sample_rate: builtins.int = ...,
-        num_channels: builtins.int = ...,
-        enable_queue: builtins.bool | None = ...,
+        sample_rate: builtins.int | None = ...,
+        num_channels: builtins.int | None = ...,
+        queue_size_ms: builtins.int | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_enable_queue", b"_enable_queue", "_options", b"_options", "enable_queue", b"enable_queue", "options", b"options"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_enable_queue", b"_enable_queue", "_options", b"_options", "enable_queue", b"enable_queue", "num_channels", b"num_channels", "options", b"options", "sample_rate", b"sample_rate", "type", b"type"]) -> None: ...
-    @typing.overload
-    def WhichOneof(self, oneof_group: typing.Literal["_enable_queue", b"_enable_queue"]) -> typing.Literal["enable_queue"] | None: ...
-    @typing.overload
-    def WhichOneof(self, oneof_group: typing.Literal["_options", b"_options"]) -> typing.Literal["options"] | None: ...
+    def HasField(self, field_name: typing.Literal["num_channels", b"num_channels", "options", b"options", "queue_size_ms", b"queue_size_ms", "sample_rate", b"sample_rate", "type", b"type"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["num_channels", b"num_channels", "options", b"options", "queue_size_ms", b"queue_size_ms", "sample_rate", b"sample_rate", "type", b"type"]) -> None: ...
 
 global___NewAudioSourceRequest = NewAudioSourceRequest
 
@@ -169,10 +291,10 @@ class CaptureAudioFrameRequest(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        source_handle: builtins.int = ...,
+        source_handle: builtins.int | None = ...,
         buffer: global___AudioFrameBufferInfo | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["buffer", b"buffer"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing.Literal["buffer", b"buffer", "source_handle", b"source_handle"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["buffer", b"buffer", "source_handle", b"source_handle"]) -> None: ...
 
 global___CaptureAudioFrameRequest = CaptureAudioFrameRequest
@@ -186,8 +308,9 @@ class CaptureAudioFrameResponse(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        async_id: builtins.int = ...,
+        async_id: builtins.int | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["async_id", b"async_id"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["async_id", b"async_id"]) -> None: ...
 
 global___CaptureAudioFrameResponse = CaptureAudioFrameResponse
@@ -203,14 +326,39 @@ class CaptureAudioFrameCallback(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        async_id: builtins.int = ...,
+        async_id: builtins.int | None = ...,
         error: builtins.str | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["_error", b"_error", "error", b"error"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_error", b"_error", "async_id", b"async_id", "error", b"error"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["_error", b"_error"]) -> typing.Literal["error"] | None: ...
+    def HasField(self, field_name: typing.Literal["async_id", b"async_id", "error", b"error"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["async_id", b"async_id", "error", b"error"]) -> None: ...
 
 global___CaptureAudioFrameCallback = CaptureAudioFrameCallback
+
+@typing.final
+class ClearAudioBufferRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    SOURCE_HANDLE_FIELD_NUMBER: builtins.int
+    source_handle: builtins.int
+    def __init__(
+        self,
+        *,
+        source_handle: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["source_handle", b"source_handle"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["source_handle", b"source_handle"]) -> None: ...
+
+global___ClearAudioBufferRequest = ClearAudioBufferRequest
+
+@typing.final
+class ClearAudioBufferResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+global___ClearAudioBufferResponse = ClearAudioBufferResponse
 
 @typing.final
 class NewAudioResamplerRequest(google.protobuf.message.Message):
@@ -259,12 +407,12 @@ class RemixAndResampleRequest(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        resampler_handle: builtins.int = ...,
+        resampler_handle: builtins.int | None = ...,
         buffer: global___AudioFrameBufferInfo | None = ...,
-        num_channels: builtins.int = ...,
-        sample_rate: builtins.int = ...,
+        num_channels: builtins.int | None = ...,
+        sample_rate: builtins.int | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["buffer", b"buffer"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing.Literal["buffer", b"buffer", "num_channels", b"num_channels", "resampler_handle", b"resampler_handle", "sample_rate", b"sample_rate"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["buffer", b"buffer", "num_channels", b"num_channels", "resampler_handle", b"resampler_handle", "sample_rate", b"sample_rate"]) -> None: ...
 
 global___RemixAndResampleRequest = RemixAndResampleRequest
@@ -287,6 +435,151 @@ class RemixAndResampleResponse(google.protobuf.message.Message):
 global___RemixAndResampleResponse = RemixAndResampleResponse
 
 @typing.final
+class NewSoxResamplerRequest(google.protobuf.message.Message):
+    """New resampler using SoX (much better quality)"""
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    INPUT_RATE_FIELD_NUMBER: builtins.int
+    OUTPUT_RATE_FIELD_NUMBER: builtins.int
+    NUM_CHANNELS_FIELD_NUMBER: builtins.int
+    INPUT_DATA_TYPE_FIELD_NUMBER: builtins.int
+    OUTPUT_DATA_TYPE_FIELD_NUMBER: builtins.int
+    QUALITY_RECIPE_FIELD_NUMBER: builtins.int
+    FLAGS_FIELD_NUMBER: builtins.int
+    input_rate: builtins.float
+    output_rate: builtins.float
+    num_channels: builtins.int
+    input_data_type: global___SoxResamplerDataType.ValueType
+    output_data_type: global___SoxResamplerDataType.ValueType
+    quality_recipe: global___SoxQualityRecipe.ValueType
+    flags: builtins.int
+    def __init__(
+        self,
+        *,
+        input_rate: builtins.float | None = ...,
+        output_rate: builtins.float | None = ...,
+        num_channels: builtins.int | None = ...,
+        input_data_type: global___SoxResamplerDataType.ValueType | None = ...,
+        output_data_type: global___SoxResamplerDataType.ValueType | None = ...,
+        quality_recipe: global___SoxQualityRecipe.ValueType | None = ...,
+        flags: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["flags", b"flags", "input_data_type", b"input_data_type", "input_rate", b"input_rate", "num_channels", b"num_channels", "output_data_type", b"output_data_type", "output_rate", b"output_rate", "quality_recipe", b"quality_recipe"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["flags", b"flags", "input_data_type", b"input_data_type", "input_rate", b"input_rate", "num_channels", b"num_channels", "output_data_type", b"output_data_type", "output_rate", b"output_rate", "quality_recipe", b"quality_recipe"]) -> None: ...
+
+global___NewSoxResamplerRequest = NewSoxResamplerRequest
+
+@typing.final
+class NewSoxResamplerResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    RESAMPLER_FIELD_NUMBER: builtins.int
+    ERROR_FIELD_NUMBER: builtins.int
+    error: builtins.str
+    @property
+    def resampler(self) -> global___OwnedSoxResampler: ...
+    def __init__(
+        self,
+        *,
+        resampler: global___OwnedSoxResampler | None = ...,
+        error: builtins.str | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["error", b"error", "message", b"message", "resampler", b"resampler"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["error", b"error", "message", b"message", "resampler", b"resampler"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["message", b"message"]) -> typing.Literal["resampler", "error"] | None: ...
+
+global___NewSoxResamplerResponse = NewSoxResamplerResponse
+
+@typing.final
+class PushSoxResamplerRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    RESAMPLER_HANDLE_FIELD_NUMBER: builtins.int
+    DATA_PTR_FIELD_NUMBER: builtins.int
+    SIZE_FIELD_NUMBER: builtins.int
+    resampler_handle: builtins.int
+    data_ptr: builtins.int
+    """*const i16"""
+    size: builtins.int
+    """in bytes"""
+    def __init__(
+        self,
+        *,
+        resampler_handle: builtins.int | None = ...,
+        data_ptr: builtins.int | None = ...,
+        size: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["data_ptr", b"data_ptr", "resampler_handle", b"resampler_handle", "size", b"size"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["data_ptr", b"data_ptr", "resampler_handle", b"resampler_handle", "size", b"size"]) -> None: ...
+
+global___PushSoxResamplerRequest = PushSoxResamplerRequest
+
+@typing.final
+class PushSoxResamplerResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    OUTPUT_PTR_FIELD_NUMBER: builtins.int
+    SIZE_FIELD_NUMBER: builtins.int
+    ERROR_FIELD_NUMBER: builtins.int
+    output_ptr: builtins.int
+    """*const i16 (could be null)"""
+    size: builtins.int
+    """in bytes"""
+    error: builtins.str
+    def __init__(
+        self,
+        *,
+        output_ptr: builtins.int | None = ...,
+        size: builtins.int | None = ...,
+        error: builtins.str | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["error", b"error", "output_ptr", b"output_ptr", "size", b"size"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["error", b"error", "output_ptr", b"output_ptr", "size", b"size"]) -> None: ...
+
+global___PushSoxResamplerResponse = PushSoxResamplerResponse
+
+@typing.final
+class FlushSoxResamplerRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    RESAMPLER_HANDLE_FIELD_NUMBER: builtins.int
+    resampler_handle: builtins.int
+    def __init__(
+        self,
+        *,
+        resampler_handle: builtins.int | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["resampler_handle", b"resampler_handle"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["resampler_handle", b"resampler_handle"]) -> None: ...
+
+global___FlushSoxResamplerRequest = FlushSoxResamplerRequest
+
+@typing.final
+class FlushSoxResamplerResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    OUTPUT_PTR_FIELD_NUMBER: builtins.int
+    SIZE_FIELD_NUMBER: builtins.int
+    ERROR_FIELD_NUMBER: builtins.int
+    output_ptr: builtins.int
+    """*const i16 (could be null)"""
+    size: builtins.int
+    """in bytes"""
+    error: builtins.str
+    def __init__(
+        self,
+        *,
+        output_ptr: builtins.int | None = ...,
+        size: builtins.int | None = ...,
+        error: builtins.str | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["error", b"error", "output_ptr", b"output_ptr", "size", b"size"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["error", b"error", "output_ptr", b"output_ptr", "size", b"size"]) -> None: ...
+
+global___FlushSoxResamplerResponse = FlushSoxResamplerResponse
+
+@typing.final
 class AudioFrameBufferInfo(google.protobuf.message.Message):
     """
     AudioFrame buffer
@@ -306,11 +599,12 @@ class AudioFrameBufferInfo(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        data_ptr: builtins.int = ...,
-        num_channels: builtins.int = ...,
-        sample_rate: builtins.int = ...,
-        samples_per_channel: builtins.int = ...,
+        data_ptr: builtins.int | None = ...,
+        num_channels: builtins.int | None = ...,
+        sample_rate: builtins.int | None = ...,
+        samples_per_channel: builtins.int | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["data_ptr", b"data_ptr", "num_channels", b"num_channels", "sample_rate", b"sample_rate", "samples_per_channel", b"samples_per_channel"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["data_ptr", b"data_ptr", "num_channels", b"num_channels", "sample_rate", b"sample_rate", "samples_per_channel", b"samples_per_channel"]) -> None: ...
 
 global___AudioFrameBufferInfo = AudioFrameBufferInfo
@@ -345,8 +639,9 @@ class AudioStreamInfo(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        type: global___AudioStreamType.ValueType = ...,
+        type: global___AudioStreamType.ValueType | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["type", b"type"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["type", b"type"]) -> None: ...
 
 global___AudioStreamInfo = AudioStreamInfo
@@ -387,11 +682,11 @@ class AudioStreamEvent(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        stream_handle: builtins.int = ...,
+        stream_handle: builtins.int | None = ...,
         frame_received: global___AudioFrameReceived | None = ...,
         eos: global___AudioStreamEOS | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["eos", b"eos", "frame_received", b"frame_received", "message", b"message"]) -> builtins.bool: ...
+    def HasField(self, field_name: typing.Literal["eos", b"eos", "frame_received", b"frame_received", "message", b"message", "stream_handle", b"stream_handle"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["eos", b"eos", "frame_received", b"frame_received", "message", b"message", "stream_handle", b"stream_handle"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["message", b"message"]) -> typing.Literal["frame_received", "eos"] | None: ...
 
@@ -441,10 +736,11 @@ class AudioSourceOptions(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        echo_cancellation: builtins.bool = ...,
-        noise_suppression: builtins.bool = ...,
-        auto_gain_control: builtins.bool = ...,
+        echo_cancellation: builtins.bool | None = ...,
+        noise_suppression: builtins.bool | None = ...,
+        auto_gain_control: builtins.bool | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["auto_gain_control", b"auto_gain_control", "echo_cancellation", b"echo_cancellation", "noise_suppression", b"noise_suppression"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["auto_gain_control", b"auto_gain_control", "echo_cancellation", b"echo_cancellation", "noise_suppression", b"noise_suppression"]) -> None: ...
 
 global___AudioSourceOptions = AudioSourceOptions
@@ -458,8 +754,9 @@ class AudioSourceInfo(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        type: global___AudioSourceType.ValueType = ...,
+        type: global___AudioSourceType.ValueType | None = ...,
     ) -> None: ...
+    def HasField(self, field_name: typing.Literal["type", b"type"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["type", b"type"]) -> None: ...
 
 global___AudioSourceInfo = AudioSourceInfo
@@ -519,3 +816,38 @@ class OwnedAudioResampler(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["handle", b"handle", "info", b"info"]) -> None: ...
 
 global___OwnedAudioResampler = OwnedAudioResampler
+
+@typing.final
+class SoxResamplerInfo(google.protobuf.message.Message):
+    """
+    Sox AudioResampler
+    """
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    def __init__(
+        self,
+    ) -> None: ...
+
+global___SoxResamplerInfo = SoxResamplerInfo
+
+@typing.final
+class OwnedSoxResampler(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    HANDLE_FIELD_NUMBER: builtins.int
+    INFO_FIELD_NUMBER: builtins.int
+    @property
+    def handle(self) -> handle_pb2.FfiOwnedHandle: ...
+    @property
+    def info(self) -> global___SoxResamplerInfo: ...
+    def __init__(
+        self,
+        *,
+        handle: handle_pb2.FfiOwnedHandle | None = ...,
+        info: global___SoxResamplerInfo | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["handle", b"handle", "info", b"info"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["handle", b"handle", "info", b"info"]) -> None: ...
+
+global___OwnedSoxResampler = OwnedSoxResampler

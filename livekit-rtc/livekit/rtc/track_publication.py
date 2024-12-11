@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from typing import Optional
+import asyncio
 
 from ._ffi_client import FfiHandle, FfiClient
 from ._proto import e2ee_pb2 as proto_e2ee
@@ -71,6 +72,13 @@ class TrackPublication:
 class LocalTrackPublication(TrackPublication):
     def __init__(self, owned_info: proto_track.OwnedTrackPublication):
         super().__init__(owned_info)
+        self._first_subscription: asyncio.Future[None] = asyncio.Future()
+
+    async def wait_for_subscription(self) -> None:
+        await asyncio.shield(self._first_subscription)
+
+    def __repr__(self) -> str:
+        return f"rtc.LocalTrackPublication(sid={self.sid}, name={self.name}, kind={self.kind}, source={self.source})"
 
 
 class RemoteTrackPublication(TrackPublication):
@@ -83,3 +91,6 @@ class RemoteTrackPublication(TrackPublication):
         req.set_subscribed.subscribe = subscribed
         req.set_subscribed.publication_handle = self._ffi_handle.handle
         FfiClient.instance.request(req)
+
+    def __repr__(self) -> str:
+        return f"rtc.RemoteTrackPublication(sid={self.sid}, name={self.name}, kind={self.kind}, source={self.source})"

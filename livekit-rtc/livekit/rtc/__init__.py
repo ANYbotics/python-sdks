@@ -16,6 +16,7 @@
 
 from ._proto import stats_pb2 as stats
 from ._proto.e2ee_pb2 import EncryptionState, EncryptionType
+from ._proto.participant_pb2 import ParticipantKind
 from ._proto.room_pb2 import (
     ConnectionQuality,
     ConnectionState,
@@ -24,9 +25,10 @@ from ._proto.room_pb2 import (
     IceServer,
     IceTransportType,
     TrackPublishOptions,
+    VideoEncoding,
 )
 from ._proto.track_pb2 import StreamState, TrackKind, TrackSource
-from ._proto.video_frame_pb2 import VideoBufferType, VideoRotation
+from ._proto.video_frame_pb2 import VideoBufferType, VideoCodec, VideoRotation
 from .audio_frame import AudioFrame
 from .audio_source import AudioSource
 from .audio_stream import AudioFrameEvent, AudioStream
@@ -55,6 +57,7 @@ from .track import (
     Track,
     VideoTrack,
 )
+from .event_emitter import EventEmitter
 from .track_publication import (
     LocalTrackPublication,
     RemoteTrackPublication,
@@ -67,6 +70,9 @@ from .video_frame import (
 )
 from .video_source import VideoSource
 from .video_stream import VideoFrameEvent, VideoStream
+from .audio_resampler import AudioResampler, AudioResamplerQuality
+from .utils import combine_audio_frames
+from .rpc import RpcError, RpcInvocationData
 
 __all__ = [
     "ConnectionQuality",
@@ -90,6 +96,7 @@ __all__ = [
     "AudioFrameEvent",
     "LocalParticipant",
     "Participant",
+    "ParticipantKind",
     "RemoteParticipant",
     "ConnectError",
     "Room",
@@ -116,11 +123,19 @@ __all__ = [
     "TrackPublication",
     "Transcription",
     "TranscriptionSegment",
+    "VideoCodec",
+    "VideoEncoding",
     "VideoFrame",
+    "VideoFrameEvent",
     "VideoSource",
     "VideoStream",
-    "VideoFrameEvent",
     "ChatManager",
     "ChatMessage",
+    "AudioResampler",
+    "AudioResamplerQuality",
+    "RpcError",
+    "RpcInvocationData",
+    "EventEmitter",
+    "combine_audio_frames",
     "__version__",
 ]
