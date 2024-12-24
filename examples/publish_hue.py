@@ -16,8 +16,8 @@ WIDTH, HEIGHT = 1280, 720
 async def main(room: rtc.Room):
     token = (
         api.AccessToken()
-        .with_identity("python-publisher")
-        .with_name("Python Publisher")
+        .with_identity("george-publisher")
+        .with_name("george Publisher")
         .with_grants(
             api.VideoGrants(
                 room_join=True,
@@ -26,6 +26,7 @@ async def main(room: rtc.Room):
         )
         .to_jwt()
     )
+    logging.info("token: \'%s\'", token)
     url = os.getenv("LIVEKIT_URL")
     logging.info("connecting to %s", url)
     try:
@@ -40,6 +41,7 @@ async def main(room: rtc.Room):
     track = rtc.LocalVideoTrack.create_video_track("hue", source)
     options = rtc.TrackPublishOptions()
     options.source = rtc.TrackSource.SOURCE_CAMERA
+    options.video_codec = rtc.VideoCodec.H264
     publication = await room.local_participant.publish_track(track, options)
     logging.info("published track %s", publication.sid)
 
