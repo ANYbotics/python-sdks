@@ -55,6 +55,7 @@ async def main(room: livekit.Room):
     track = livekit.LocalVideoTrack.create_video_track("hue", source)
     options = livekit.TrackPublishOptions()
     options.source = livekit.TrackSource.SOURCE_CAMERA
+    options.video_codec = rtc.VideoCodec.H264
     publication = await room.local_participant.publish_track(track, options)
     logging.info("published track %s", publication.sid)
 
